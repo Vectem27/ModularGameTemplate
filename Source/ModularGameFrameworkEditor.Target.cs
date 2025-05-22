@@ -11,11 +11,6 @@ public class ModularGameFrameworkEditorTarget : TargetRules
 
         ExtraModuleNames.Add("ModularGameFramework" /* ,"ModularGameFrameworkEditor" */);
 
-        if (!bBuildAllModules)
-        {
-            NativePointerMemberBehaviorOverride = PointerMemberBehavior.Disallow;
-        }
-
         ModularGameFrameworkTarget.ApplySharedModularGameFrameworkTargetSettings(this);
 
         // This is used for touch screen development along with the "Unreal Remote 2" app

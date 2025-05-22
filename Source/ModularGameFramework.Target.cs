@@ -86,7 +86,7 @@ public class ModularGameFrameworkTarget : TargetRules
                 if (!bHasWarnedAboutShared)
                 {
                     bHasWarnedAboutShared = true;
-                    Logger.LogWarning("LyraGameEOS and dynamic target options are disabled when packaging from an installed version of the engine");
+                    Logger.LogWarning("ModularGameFrameworkEOS and dynamic target options are disabled when packaging from an installed version of the engine");
                 }
             }
         }

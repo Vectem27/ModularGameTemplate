@@ -1,0 +1,6 @@
+[submodule "Plugins/ModioUGC"]
+	path = Plugins/ModioUGC
+	url = https://github.com/modio/modio-ue-modiougc
+[submodule "Plugins/Modio"]
+	path = Plugins/Modio
+	url = https://github.com/modio/modio-ue
