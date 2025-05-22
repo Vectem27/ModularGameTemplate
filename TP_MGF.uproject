@@ -5,7 +5,7 @@
 	"Description": "",
 	"Modules": [
 		{
-			"Name": "ModularGameFramework",
+			"Name": "TP_MGF",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}

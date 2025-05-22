@@ -3,15 +3,15 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class ModularGameFrameworkEditorTarget : TargetRules
+public class TP_MGFEditorTarget : TargetRules
 {
-	public ModularGameFrameworkEditorTarget( TargetInfo Target) : base(Target)
+	public TP_MGFEditorTarget( TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
 
         ExtraModuleNames.Add("ModularGameFramework" /* ,"ModularGameFrameworkEditor" */);
 
-        ModularGameFrameworkTarget.ApplySharedModularGameFrameworkTargetSettings(this);
+        TP_MGFTarget.ApplySharedTP_MGFTargetSettings(this);
 
         // This is used for touch screen development along with the "Unreal Remote 2" app
         EnablePlugins.Add("RemoteSession");

@@ -2,16 +2,16 @@
 
 using UnrealBuildTool;
 
-public class ModularGameFramework : ModuleRules
+public class TP_MGF : ModuleRules
 {
-	public ModularGameFramework(ReadOnlyTargetRules Target) : base(Target)
+	public TP_MGF(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicIncludePaths.AddRange(
             new string[] 
 			{
-                "ModularGameFramework"
+                "TP_MGF"
             }
         );
 

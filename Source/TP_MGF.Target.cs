@@ -8,20 +8,20 @@ using System.Collections.Generic;
 using UnrealBuildBase;
 using Microsoft.Extensions.Logging;
 
-public class ModularGameFrameworkTarget : TargetRules
+public class TP_MGFTarget : TargetRules
 {
-	public ModularGameFrameworkTarget(TargetInfo Target) : base(Target)
+	public TP_MGFTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
 
-        ExtraModuleNames.Add("ModularGameFramework");
+        ExtraModuleNames.Add("TP_MGF");
 
-		ModularGameFrameworkTarget.ApplySharedModularGameFrameworkTargetSettings(this);
+		TP_MGFTarget.ApplySharedTP_MGFTargetSettings(this);
     }
 
     private static bool bHasWarnedAboutShared = false;
 
-    internal static void ApplySharedModularGameFrameworkTargetSettings(TargetRules Target)
+    internal static void ApplySharedTP_MGFTargetSettings(TargetRules Target)
 	{
         ILogger Logger = Target.Logger;
 
@@ -67,7 +67,7 @@ public class ModularGameFrameworkTarget : TargetRules
                 Target.GlobalDefinitions.Add("UE_ASSETREGISTRY_INDIRECT_ASSETDATA_POINTERS=1");
             }
 
-            ModularGameFrameworkTarget.ConfigureGameFeaturePlugins(Target);
+            TP_MGFTarget.ConfigureGameFeaturePlugins(Target);
         }
         else
         {
@@ -78,7 +78,7 @@ public class ModularGameFrameworkTarget : TargetRules
             // This only works in editor or Unique build environments
             if (Target.Type == TargetType.Editor)
             {
-                ModularGameFrameworkTarget.ConfigureGameFeaturePlugins(Target);
+                TP_MGFTarget.ConfigureGameFeaturePlugins(Target);
             }
             else
             {
@@ -86,7 +86,7 @@ public class ModularGameFrameworkTarget : TargetRules
                 if (!bHasWarnedAboutShared)
                 {
                     bHasWarnedAboutShared = true;
-                    Logger.LogWarning("ModularGameFrameworkEOS and dynamic target options are disabled when packaging from an installed version of the engine");
+                    Logger.LogWarning("TP_MGFEOS and dynamic target options are disabled when packaging from an installed version of the engine");
                 }
             }
         }
