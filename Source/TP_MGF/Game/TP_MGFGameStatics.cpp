@@ -20,7 +20,7 @@ FString BuildMapOptions(const FString& MapName, const TMap<FString, FString>& Op
     for (const auto& Pair : OptionMap)
     {
         if (!isFirst)
-            Options +=  TEXT("&");
+            Options +=  TEXT("?");
         isFirst = false;
 
         Options += Pair.Key + TEXT("=") + Pair.Value;
