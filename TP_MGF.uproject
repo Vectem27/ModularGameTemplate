@@ -66,6 +66,10 @@
 		{
 			"Name": "CommonUI",
 			"Enabled": true
+		},
+		{
+			"Name": "TestFeatures",
+			"Enabled": true
 		}
 	]
 }
