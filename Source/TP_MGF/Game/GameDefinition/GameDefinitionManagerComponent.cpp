@@ -91,7 +91,7 @@ void UGameDefinitionManagerComponent::StartGameDefinitionLoad()
 	TSet<FPrimaryAssetId> BundleAssetList;
 	TSet<FSoftObjectPath> RawAssetList;
 
-	// Load assets associated with the experience
+	// Load assets associated with the game definition
 
 	TArray<FName> BundlesToLoad;
 	BundlesToLoad.Add(FTP_MGFBundles::Equipped);
@@ -148,7 +148,7 @@ void UGameDefinitionManagerComponent::StartGameDefinitionLoad()
 			}));
 	}
 
-	// This set of assets gets preloaded, but we don't block the start of the experience based on it
+	// This set of assets gets preloaded, but we don't block the start of the game definition based on it
 	TSet<FPrimaryAssetId> PreloadAssetList;
 	//@TODO: Determine assets to preload (but not blocking-ly)
 	if (PreloadAssetList.Num() > 0)
@@ -162,7 +162,7 @@ void UGameDefinitionManagerComponent::OnGameDefinitionLoadComplete()
 	check(LoadState == EGameDefinitionLoadState::Loading);
 	check(CurrentGameDefinition != nullptr);
 
-	UE_LOG(LogTP_MGFGameDefinition, Log, TEXT("EXPERIENCE: OnGameDefinitionLoadComplete(CurrentGameDefinition = %s)"),
+	UE_LOG(LogTP_MGFGameDefinition, Log, TEXT("GAME DEFINITION: OnGameDefinitionLoadComplete(CurrentGameDefinition = %s)"),
 		*CurrentGameDefinition->GetPrimaryAssetId().ToString());
 
 	// find the URLs for our GameFeaturePlugins - filtering out dupes and ones that don't have a valid mapping
@@ -179,7 +179,7 @@ void UGameDefinitionManagerComponent::OnGameDefinitionLoadComplete()
 				}
 				else
 				{
-					ensureMsgf(false, TEXT("OnGameDefinitionLoadComplete failed to find plugin URL from PluginName %s for experience %s - fix data, ignoring for this run"), *PluginName, *Context->GetPrimaryAssetId().ToString());
+					ensureMsgf(false, TEXT("OnGameDefinitionLoadComplete failed to find plugin URL from PluginName %s for game definition %s - fix data, ignoring for this run"), *PluginName, *Context->GetPrimaryAssetId().ToString());
 				}
 			}
 
@@ -297,7 +297,7 @@ void UGameDefinitionManagerComponent::EndPlay(const EEndPlayReason::Type EndPlay
 {
 	Super::EndPlay(EndPlayReason);
 
-	// deactivate any features this experience loaded
+	// deactivate any features this game definition loaded
 	//@TODO: This should be handled FILO as well
 	for (const FString& PluginURL : GameFeaturePluginURLs)
 	{
@@ -350,7 +350,7 @@ void UGameDefinitionManagerComponent::EndPlay(const EEndPlayReason::Type EndPlay
 
 		if (NumExpectedPausers > 0)
 		{
-			UE_LOG(LogTP_MGFGameDefinition, Error, TEXT("Actions that have asynchronous deactivation aren't fully supported yet in TP_MGF experiences"));
+			UE_LOG(LogTP_MGFGameDefinition, Error, TEXT("Actions that have asynchronous deactivation aren't fully supported yet in TP_MGF game definitions"));
 		}
 
 		if (NumExpectedPausers == NumObservedPausers)

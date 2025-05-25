@@ -30,14 +30,14 @@ public:
 	FString GetGameId() const;
 
 	UFUNCTION(BlueprintCallable, Category = "TP_MGF|Game")
-	void SetGameId(FString NewGameId);
+	virtual void SetGameId(FString NewGameId);
 
 	//~AGameModeBase interface
 	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+	virtual void InitGameState() override;
 	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
 	virtual APawn* SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer, const FTransform& SpawnTransform) override;
 	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) override;
-	virtual void InitGameState() override;
 	virtual void GenericPlayerInitialization(AController* NewPlayer) override;
 	virtual void FailedToRestartPlayer(AController* NewPlayer) override;
 	//~End of AGameModeBase interface
@@ -53,10 +53,8 @@ protected:
 	void OnGameDefinitionLoaded(const UGameDefinition* CurrentGameDefinition);
 	bool IsGameDefinitionLoaded() const;
 
-	UFUNCTION(BlueprintNativeEvent, DisplayName="On Game ID Set", Category = "TP_MGF|Game")
-	void OnGameIdSet(const FString& NewGameId);
-
-	void StartGame();
+	UFUNCTION(BlueprintImplementableEvent, DisplayName="On Game ID Set", Category = "TP_MGF|Game")
+	void K2_OnGameIdSet(const FString& NewGameId);
 private:
 	UPROPERTY()
 	FString GameId; 

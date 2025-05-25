@@ -75,7 +75,7 @@ void ATP_MGFGameMode::SetGameId(FString NewGameId)
 {
 	GameId = NewGameId;
 
-	OnGameIdSet(GameId);
+	K2_OnGameIdSet(GameId);
 }
 
 void ATP_MGFGameMode::RequestPlayerRestartNextFrame(AController* Controller, bool bForceReset)
@@ -118,9 +118,36 @@ bool ATP_MGFGameMode::IsGameDefinitionLoaded() const
 	return GameDefinitionComponent->IsGameDefinitionLoaded();
 }
 
-void ATP_MGFGameMode::StartGame()
+///////////////////////////////////////////////////////////////////////
+// AGameModeBase methods
+
+void ATP_MGFGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
+	Super::InitGame(MapName, Options, ErrorMessage);
+
+	FString NewGameId = UGameplayStatics::ParseOption(Options, TEXT("GameId"));
+
+	if (!NewGameId.IsEmpty())
+	{
+		UE_LOG(LogTP_MGF, Display, TEXT("Game id set : %s"), *NewGameId);
+		SetGameId(NewGameId);
+	}
+	else
+	{
+		UE_LOG(LogTP_MGF, Warning, TEXT("No gameId found after the game initialization"), *GameId);
+	}
+}
+
+void ATP_MGFGameMode::InitGameState()
+{
+	Super::InitGameState();
+
 	// TODO: Move all of the game definition loading logic into a separate function
+
+	// Listen for the game definition load to complete	
+	UGameDefinitionManagerComponent* GameDefinitionComponent = GameState->FindComponentByClass<UGameDefinitionManagerComponent>();
+	check(GameDefinitionComponent);
+	GameDefinitionComponent->CallOrRegister_OnGameDefinitionLoaded(FOnGameDefinitionLoaded::FDelegate::CreateUObject(this, &ATP_MGFGameMode::OnGameDefinitionLoaded));
 
 	FPrimaryAssetId GameDefinitionId;
 	FString GameDefinitionIdSource;
@@ -177,7 +204,7 @@ void ATP_MGFGameMode::StartGame()
 	}
 
 	// Check and set game definition
-	{ 
+	{
 		if (GameDefinitionId.IsValid())
 		{
 			UE_LOG(LogTP_MGFGameDefinition, Log, TEXT("Identified game definition %s (Source: %s)"), *GameDefinitionId.ToString(), *GameDefinitionIdSource);
@@ -193,35 +220,6 @@ void ATP_MGFGameMode::StartGame()
 	}
 
 	// TODO: add Save/Load logic for the game
-}
-
-void ATP_MGFGameMode::OnGameIdSet_Implementation(const FString& NewGameId)
-{
-	// This method can be overridden in blueprints or in cpp to handle game id changes
-	// For now, it does nothing
-}
-
-///////////////////////////////////////////////////////////////////////
-// AGameModeBase methods
-
-void ATP_MGFGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
-{
-	Super::InitGame(MapName, Options, ErrorMessage);
-
-	FString NewGameId = UGameplayStatics::ParseOption(Options, TEXT("GameId"));
-
-	if (!NewGameId.IsEmpty())
-	{
-		UE_LOG(LogTP_MGF, Display, TEXT("Game id set : %s"), *NewGameId);
-		SetGameId(NewGameId);
-	}
-	else
-	{
-		UE_LOG(LogTP_MGF, Warning, TEXT("No gameId found after the game initialization"), *GameId);
-	}
-
-	// Wait for the next frame to give time to init and start game
-	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ATP_MGFGameMode::StartGame);
 }
 
 UClass* ATP_MGFGameMode::GetDefaultPawnClassForController_Implementation(AController* InController)
@@ -285,17 +283,6 @@ void ATP_MGFGameMode::HandleStartingNewPlayer_Implementation(APlayerController* 
 	{
 		Super::HandleStartingNewPlayer_Implementation(NewPlayer);
 	}
-}
-
-void ATP_MGFGameMode::InitGameState()
-{
-	Super::InitGameState();
-	
-	// Listen for the game definition load to complete	
-	UGameDefinitionManagerComponent* GameDefinitionComponent = GameState->FindComponentByClass<UGameDefinitionManagerComponent>();
-	check(GameDefinitionComponent);
-	GameDefinitionComponent->CallOrRegister_OnGameDefinitionLoaded(FOnGameDefinitionLoaded::FDelegate::CreateUObject(this, &ATP_MGFGameMode::OnGameDefinitionLoaded));
-
 }
 
 void ATP_MGFGameMode::GenericPlayerInitialization(AController* NewPlayer)
