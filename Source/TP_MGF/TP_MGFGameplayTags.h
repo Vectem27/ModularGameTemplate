@@ -6,7 +6,7 @@ namespace TP_MGFGameplayTags
 {
 	TP_MGF_API	FGameplayTag FindTagByString(const FString& TagString, bool bMatchPartialString = false);
 
-	// Declare all of the custom native tags that Lyra will use
+	// Declare all of the custom native tags that TP_MGF will use
 	TP_MGF_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_ActivateFail_IsDead);
 	TP_MGF_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_ActivateFail_Cooldown);
 	TP_MGF_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_ActivateFail_Cost);

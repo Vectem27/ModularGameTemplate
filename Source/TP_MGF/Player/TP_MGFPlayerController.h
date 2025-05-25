@@ -1,6 +1,4 @@
 #pragma once
-
-#include "Player/Camera/CameraMode/TP_MGFCameraAssistInterface.h"
 #include "CommonPlayerController.h"
 
 #include "TP_MGFPlayerController.generated.h"
@@ -16,7 +14,7 @@ class UTP_MGFSettingsShared;
  *	The base player controller class used by this project.
  */
 UCLASS(meta = (ShortTooltip = "The base player controller class used by this project."))
-class TP_MGF_API ATP_MGFPlayerController : public ACommonPlayerController, public ITP_MGFCameraAssistInterface
+class TP_MGF_API ATP_MGFPlayerController : public ACommonPlayerController
 {
 	GENERATED_BODY()
 
@@ -43,17 +41,10 @@ public:
 	//~APlayerController interface
 	virtual void SetPlayer(UPlayer* InPlayer) override;
 	virtual void UpdateForceFeedback(IInputInterface* InputInterface, const int32 ControllerId) override;
-	virtual void UpdateHiddenComponents(const FVector& ViewLocation, TSet<FPrimitiveComponentId>& OutHiddenComponents) override;
 	virtual void PreProcessInput(const float DeltaTime, const bool bGamePaused) override;
 	virtual void PostProcessInput(const float DeltaTime, const bool bGamePaused) override;
 	//~End of APlayerController interface
 
-	//~ITP_MGFCameraAssistInterface interface
-	virtual void OnCameraPenetratingTarget() override;
-	//~End of ITP_MGFCameraAssistInterface interface
-
 protected:
 	void OnSettingsChanged(UTP_MGFSettingsShared* Settings);
-
-	bool bHideViewTargetPawnNextFrame = false;
 };

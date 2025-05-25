@@ -8,7 +8,7 @@
 #include "AbilitySystem/TP_MGFAbilitySet.h"
 #include "AbilitySystem/TP_MGFAbilitySystemComponent.h"
 #include "Game/GameDefinition/PawnData.h"
-#include "Pawn/TP_MGFPawnExtensionComponent.h"
+#include "Pawn/PawnExtensionComponent.h"
 #include "Player/TP_MGFPlayerController.h"
 #include "Game/GameDefinition/GameDefinitionManagerComponent.h"
 #include "Game/TP_MGFGameMode.h"

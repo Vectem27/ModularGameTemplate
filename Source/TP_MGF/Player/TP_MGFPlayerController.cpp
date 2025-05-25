@@ -7,7 +7,6 @@
 #include "AbilitySystem/TP_MGFAbilitySystemComponent.h"
 #include "AbilitySystem/TP_MGFAbilitySystemGlobals.h"
 
-#include "Player/Camera/TP_MGFPlayerCameraManager.h"
 #include "Player/TP_MGFPlayerState.h"
 #include "Player/TP_MGFLocalPlayer.h"
 
@@ -31,7 +30,6 @@ namespace TP_MGF
 ATP_MGFPlayerController::ATP_MGFPlayerController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	PlayerCameraManagerClass = ATP_MGFPlayerCameraManager::StaticClass();
 }
 
 void ATP_MGFPlayerController::BeginPlay()
@@ -90,11 +88,6 @@ void ATP_MGFPlayerController::PostProcessInput(const float DeltaTime, const bool
 	Super::PostProcessInput(DeltaTime, bGamePaused);
 }
 
-void ATP_MGFPlayerController::OnCameraPenetratingTarget()
-{
-	bHideViewTargetPawnNextFrame = true;
-}
-
 void ATP_MGFPlayerController::UpdateForceFeedback(IInputInterface* InputInterface, const int32 ControllerId)
 {
 	if (bForceFeedbackEnabled)
@@ -111,60 +104,6 @@ void ATP_MGFPlayerController::UpdateForceFeedback(IInputInterface* InputInterfac
 	}
 
 	InputInterface->SetForceFeedbackChannelValues(ControllerId, FForceFeedbackValues());
-}
-
-void ATP_MGFPlayerController::UpdateHiddenComponents(const FVector& ViewLocation, TSet<FPrimitiveComponentId>& OutHiddenComponents)
-{
-	Super::UpdateHiddenComponents(ViewLocation, OutHiddenComponents);
-
-	if (bHideViewTargetPawnNextFrame)
-	{
-		AActor* const ViewTargetPawn = PlayerCameraManager ? Cast<AActor>(PlayerCameraManager->GetViewTarget()) : nullptr;
-		if (ViewTargetPawn)
-		{
-			// internal helper func to hide all the components
-			auto AddToHiddenComponents = [&OutHiddenComponents](const TInlineComponentArray<UPrimitiveComponent*>& InComponents)
-				{
-					// add every component and all attached children
-					for (UPrimitiveComponent* Comp : InComponents)
-					{
-						if (Comp->IsRegistered())
-						{
-							OutHiddenComponents.Add(Comp->GetPrimitiveSceneId());
-
-							for (USceneComponent* AttachedChild : Comp->GetAttachChildren())
-							{
-								static FName NAME_NoParentAutoHide(TEXT("NoParentAutoHide"));
-								UPrimitiveComponent* AttachChildPC = Cast<UPrimitiveComponent>(AttachedChild);
-								if (AttachChildPC && AttachChildPC->IsRegistered() && !AttachChildPC->ComponentTags.Contains(NAME_NoParentAutoHide))
-								{
-									OutHiddenComponents.Add(AttachChildPC->GetPrimitiveSceneId());
-								}
-							}
-						}
-					}
-				};
-
-			//TODO Solve with an interface.  Gather hidden components or something.
-			//TODO Hiding isn't awesome, sometimes you want the effect of a fade out over a proximity, needs to bubble up to designers.
-
-			// hide pawn's components
-			TInlineComponentArray<UPrimitiveComponent*> PawnComponents;
-			ViewTargetPawn->GetComponents(PawnComponents);
-			AddToHiddenComponents(PawnComponents);
-
-			//// hide weapon too
-			//if (ViewTargetPawn->CurrentWeapon)
-			//{
-			//	TInlineComponentArray<UPrimitiveComponent*> WeaponComponents;
-			//	ViewTargetPawn->CurrentWeapon->GetComponents(WeaponComponents);
-			//	AddToHiddenComponents(WeaponComponents);
-			//}
-		}
-
-		// we consumed it, reset for next frame
-		bHideViewTargetPawnNextFrame = false;
-	}
 }
 
 void ATP_MGFPlayerController::OnUnPossess()

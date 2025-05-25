@@ -106,7 +106,4 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TP_MGF|Character", Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UTP_MGFPawnExtensionComponent> PawnExtComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TP_MGF|Character", Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UTP_MGFCameraComponent> CameraComponent;
 };

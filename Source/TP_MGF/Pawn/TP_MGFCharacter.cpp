@@ -8,10 +8,9 @@
 // Project
 #include "AbilitySystem/TP_MGFAbilitySystemComponent.h"
 
-#include "Pawn/TP_MGFPawnExtensionComponent.h"
+#include "Pawn/PawnExtensionComponent.h"
 #include "Pawn/TP_MGFCharacterMovementComponent.h"
 
-#include "Player/Camera/TP_MGFCameraComponent.h"
 #include "Player/TP_MGFPlayerState.h"
 #include "Player/TP_MGFPlayerController.h"
 
@@ -58,9 +57,6 @@ ATP_MGFCharacter::ATP_MGFCharacter(const FObjectInitializer& ObjectInitializer)
 	PawnExtComponent = CreateDefaultSubobject<UTP_MGFPawnExtensionComponent>(TEXT("PawnExtensionComponent"));
 	PawnExtComponent->OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemInitialized));
 	PawnExtComponent->OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemUninitialized));
-
-	CameraComponent = CreateDefaultSubobject<UTP_MGFCameraComponent>(TEXT("CameraComponent"));
-	CameraComponent->SetRelativeLocation(FVector(-300.0f, 0.0f, 75.0f));
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = true;
