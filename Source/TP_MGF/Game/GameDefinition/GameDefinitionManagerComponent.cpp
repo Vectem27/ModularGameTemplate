@@ -91,6 +91,15 @@ void UGameDefinitionManagerComponent::StartGameDefinitionLoad()
 	TSet<FPrimaryAssetId> BundleAssetList;
 	TSet<FSoftObjectPath> RawAssetList;
 
+	BundleAssetList.Add(CurrentGameDefinition->GetPrimaryAssetId());
+	for (const TObjectPtr<UGameActionSet>& ActionSet : CurrentGameDefinition->ActionSets)
+	{
+		if (ActionSet != nullptr)
+		{
+			BundleAssetList.Add(ActionSet->GetPrimaryAssetId());
+		}
+	}
+
 	// Load assets associated with the game definition
 
 	TArray<FName> BundlesToLoad;
@@ -195,6 +204,13 @@ void UGameDefinitionManagerComponent::OnGameDefinitionLoadComplete()
 		};
 
 	CollectGameFeaturePluginURLs(CurrentGameDefinition, CurrentGameDefinition->GameFeaturesToEnable);
+	for (const TObjectPtr<UGameActionSet>& ActionSet : CurrentGameDefinition->ActionSets)
+	{
+		if (ActionSet != nullptr)
+		{
+			CollectGameFeaturePluginURLs(ActionSet, ActionSet->GameFeaturesToEnable);
+		}
+	}
 
 	// Load and activate the features	
 	NumGameFeaturePluginsLoading = GameFeaturePluginURLs.Num();

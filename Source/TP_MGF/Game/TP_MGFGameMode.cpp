@@ -5,7 +5,7 @@
 
 // Project includes
 #include "Pawn/TP_MGFCharacter.h"
-#include "Pawn/TP_MGFPawnExtensionComponent.h"
+#include "Pawn/PawnExtensionComponent.h"
 #include "Player/TP_MGFPlayerState.h"
 #include "Player/TP_MGFPlayerController.h"
 #include "UI/TP_MGFHUD.h"
