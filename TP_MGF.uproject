@@ -70,6 +70,14 @@
 		{
 			"Name": "TestFeatures",
 			"Enabled": true
+		},
+		{
+			"Name": "TestDependanceFeature",
+			"Enabled": true
+		},
+		{
+			"Name": "TestDependenceFeature_Two",
+			"Enabled": true
 		}
 	]
 }
