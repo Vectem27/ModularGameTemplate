@@ -54,9 +54,9 @@ ATP_MGFCharacter::ATP_MGFCharacter(const FObjectInitializer& ObjectInitializer)
 	TP_MGFMoveComp->bCanWalkOffLedgesWhenCrouching = true;
 	TP_MGFMoveComp->SetCrouchedHalfHeight(65.0f);
 
-	PawnExtComponent = CreateDefaultSubobject<UTP_MGFPawnExtensionComponent>(TEXT("PawnExtensionComponent"));
-	PawnExtComponent->OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemInitialized));
-	PawnExtComponent->OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemUninitialized));
+	//PawnExtComponent = CreateDefaultSubobject<UTP_MGFPawnExtensionComponent>(TEXT("PawnExtensionComponent"));
+	//PawnExtComponent->OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemInitialized));
+	//PawnExtComponent->OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemUninitialized));
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = true;
