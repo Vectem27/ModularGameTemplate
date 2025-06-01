@@ -158,23 +158,62 @@ FGameplayAbilitySpec* UAbilitySystemComponentExtension::FindAbilitySpec(FGamepla
 
 void UAbilitySystemComponentExtension::TryBindAbilityInput(UInputAction* InputAction, FAbilityInputBinding& AbilityInputBinding)
 {
-	auto InputComponent = GetEnhancedInputComponent();
+	UEnhancedInputComponent* InputComponent = GetEnhancedInputComponent();
 	if (!InputComponent)
+	{
+		TWeakObjectPtr<UAbilitySystemComponentExtension> WeakThis(this);
+
+		GetWorld()->GetTimerManager().SetTimerForNextTick([WeakThis, InputAction, InputID = AbilityInputBinding.InputID]()
+			{
+				if (WeakThis.IsValid())
+				{
+					if (FAbilityInputBinding* FoundBinding = WeakThis->MappedAbilities.Find(InputAction))
+					{
+						WeakThis->TryBindAbilityInput(InputAction, *FoundBinding);
+					}
+				}
+			});
 		return;
-
-
-	// Pressed event
-	if (AbilityInputBinding.OnPressedHandle == 0)
-	{
-		AbilityInputBinding.OnPressedHandle = InputComponent->BindAction(InputAction, ETriggerEvent::Started, this, &UAbilitySystemComponentExtension::OnAbilityInputPressed, InputAction).GetHandle();
 	}
 
-	// Released event
-	if (AbilityInputBinding.OnReleasedHandle == 0)
+	// Vérifie si déjà lié au même InputComponent
+	if (AbilityInputBinding.IsStillBoundTo(InputComponent))
 	{
-		AbilityInputBinding.OnReleasedHandle = InputComponent->BindAction(InputAction, ETriggerEvent::Completed, this, &UAbilitySystemComponentExtension::OnAbilityInputReleased, InputAction).GetHandle();
+		return;
 	}
+
+	// Unbind ancien si différent
+	if (AbilityInputBinding.OnPressedHandle != 0 || AbilityInputBinding.OnReleasedHandle != 0)
+	{
+		if (UEnhancedInputComponent* OldInput = AbilityInputBinding.BoundInputComponent.Get())
+		{
+			OldInput->RemoveBindingByHandle(AbilityInputBinding.OnPressedHandle);
+			OldInput->RemoveBindingByHandle(AbilityInputBinding.OnReleasedHandle);
+		}
+
+		AbilityInputBinding.Reset();
+	}
+
+	AbilityInputBinding.OnPressedHandle = InputComponent->BindAction(
+		InputAction,
+		ETriggerEvent::Started,
+		this,
+		&UAbilitySystemComponentExtension::OnAbilityInputPressed,
+		InputAction
+	).GetHandle();
+
+	AbilityInputBinding.OnReleasedHandle = InputComponent->BindAction(
+		InputAction,
+		ETriggerEvent::Completed,
+		this,
+		&UAbilitySystemComponentExtension::OnAbilityInputReleased,
+		InputAction
+	).GetHandle();
+
+	AbilityInputBinding.BoundInputComponent = InputComponent;
 }
+
+
 
 UEnhancedInputComponent* UAbilitySystemComponentExtension::GetEnhancedInputComponent() const
 {

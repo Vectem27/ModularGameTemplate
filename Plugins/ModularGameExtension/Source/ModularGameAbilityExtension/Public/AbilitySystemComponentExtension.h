@@ -17,7 +17,23 @@ struct FAbilityInputBinding
 	uint32 OnPressedHandle = 0;
 	uint32 OnReleasedHandle = 0;
 	TArray<FGameplayAbilitySpecHandle> BoundAbilitiesStack;
+
+	// Pour détecter les resets d'input component
+	TWeakObjectPtr<UEnhancedInputComponent> BoundInputComponent = nullptr;
+
+	bool IsStillBoundTo(UEnhancedInputComponent* InputComp) const
+	{
+		return BoundInputComponent.IsValid() && BoundInputComponent.Get() == InputComp;
+	}
+
+	void Reset()
+	{
+		OnPressedHandle = 0;
+		OnReleasedHandle = 0;
+		BoundInputComponent = nullptr;
+	}
 };
+
 
 /**
  *

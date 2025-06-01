@@ -261,6 +261,9 @@ void UGameFeatureAction_AddInputContextMapping::OnGameFeatureDeactivating(FGameF
 
 void UGameFeatureAction_AddInputContextMapping::RemoveMappingToLocalPlayer(ULocalPlayer* localPlayer)
 {
+	// TODO: Check for mapping added cause, and remove only if its this cause (Can create a subsystem for that)
+
+
 	if (ensure(localPlayer))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(localPlayer))
