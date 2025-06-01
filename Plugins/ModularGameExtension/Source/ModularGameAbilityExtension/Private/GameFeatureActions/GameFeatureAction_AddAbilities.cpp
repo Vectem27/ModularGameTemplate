@@ -5,7 +5,7 @@
 #include "AbilitySystemComponent.h"
 
 // Plugin includes
-
+#include "AbilitySystemComponentExtension.h"
 
 
 #if WITH_EDITOR
@@ -110,6 +110,8 @@ void UGameFeatureAction_AddAbilities::AddActorAbilities(AActor* Actor, const FGa
 
 	if (UAbilitySystemComponent* AbilitySystemComponent = FindOrAddComponentForActor<UAbilitySystemComponent>(Actor, AbilitiesEntry, ActiveData))
 	{
+		UAbilitySystemComponentExtension* AbilitySystemComponentExtension = Cast<UAbilitySystemComponentExtension>(AbilitySystemComponent);
+
 		FActorExtensions AddedExtensions;
 		AddedExtensions.Abilities.Reserve(AbilitiesEntry.GrantedAbilities.Num());
 		AddedExtensions.Attributes.Reserve(AbilitiesEntry.GrantedAttributes.Num());
@@ -122,6 +124,11 @@ void UGameFeatureAction_AddAbilities::AddActorAbilities(AActor* Actor, const FGa
 				FGameplayAbilitySpecHandle AbilityHandle = AbilitySystemComponent->GiveAbility(NewAbilitySpec);
 
 				AddedExtensions.Abilities.Add(AbilityHandle);
+
+				if (IsValid(AbilitySystemComponentExtension) && Ability.InputAction.IsValid())
+				{
+					AbilitySystemComponentExtension->SetInputBinding(Ability.InputAction.Get(), AbilityHandle);
+				}
 			}
 		}
 
@@ -162,6 +169,8 @@ void UGameFeatureAction_AddAbilities::RemoveActorAbilities(AActor* Actor, FPerCo
 	{
 		if (UAbilitySystemComponent* AbilitySystemComponent = Actor->FindComponentByClass<UAbilitySystemComponent>())
 		{
+			UAbilitySystemComponentExtension* AbilitySystemComponentExtension = Cast<UAbilitySystemComponentExtension>(AbilitySystemComponent);
+
 			for (UAttributeSet* AttribSetInstance : ActorExtensions->Attributes)
 			{
 				AbilitySystemComponent->RemoveSpawnedAttribute(AttribSetInstance);
@@ -170,9 +179,13 @@ void UGameFeatureAction_AddAbilities::RemoveActorAbilities(AActor* Actor, FPerCo
 			for (FGameplayAbilitySpecHandle AbilityHandle : ActorExtensions->Abilities)
 			{
 				AbilitySystemComponent->SetRemoveAbilityOnEnd(AbilityHandle);
+
+				if (IsValid(AbilitySystemComponentExtension) && AbilityHandle.IsValid())
+				{
+					AbilitySystemComponentExtension->ClearInputBinding(AbilityHandle);
+				}
 			}
 		}
-
 		ActiveData.ActiveExtensions.Remove(Actor);
 	}
 }
