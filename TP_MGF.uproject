@@ -7,7 +7,11 @@
 		{
 			"Name": "TP_MGF",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"DeveloperSettings",
+				"Engine"
+			]
 		}
 	],
 	"Plugins": [
@@ -27,12 +31,52 @@
 			"Enabled": true
 		},
 		{
+			"Name": "ModularGameplayActors",
+			"Enabled": true
+		},
+		{
 			"Name": "Modio",
-			"Enabled": true,
+			"Enabled": false,
 			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/1ab22ed2961a4cc19b9151bd072df998"
 		},
 		{
 			"Name": "ModioUGC",
+			"Enabled": false
+		},
+		{
+			"Name": "GameplayAbilities",
+			"Enabled": true
+		},
+		{
+			"Name": "GameSubtitles",
+			"Enabled": true
+		},
+		{
+			"Name": "CommonLoadingScreen",
+			"Enabled": true
+		},
+		{
+			"Name": "AudioModulation",
+			"Enabled": true
+		},
+		{
+			"Name": "SignificanceManager",
+			"Enabled": true
+		},
+		{
+			"Name": "CommonUI",
+			"Enabled": true
+		},
+		{
+			"Name": "TestFeatures",
+			"Enabled": true
+		},
+		{
+			"Name": "TestDependanceFeature",
+			"Enabled": true
+		},
+		{
+			"Name": "TestDependenceFeature_Two",
 			"Enabled": true
 		}
 	]

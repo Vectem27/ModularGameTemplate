@@ -25,20 +25,64 @@ public class TP_MGF : ModuleRules
         PublicDependencyModuleNames.AddRange(
 			new string[] 
 			{ 
+                ////////////////////
+				/* Engine Modules */
+                ////////////////////
+
+                // Core
 				"Core", 
 				"CoreUObject", 
 				"Engine", 
+
+                // Input
 				"InputCore", 
-				"EnhancedInput" 
-			}
-		);
+				"EnhancedInput",
+
+                // Gameplay
+                "GameplayAbilities",
+                "GameplayTags",
+                "GameplayTasks",
+                "GameFeatures",
+                "ModularGameplay",
+
+                // Systems
+                "DeveloperSettings",
+                "SignificanceManager",
+                
+                /////////////////////
+				/* Project Modules */
+                /////////////////////
+
+                // Gameplay
+				"ModularGameplayActors",
+                "CommonGame",
+                "CommonLoadingScreen",
+
+            }
+        );
 
 		PrivateDependencyModuleNames.AddRange(
 			new string[] 
 			{ 
-				
-			}
-		);
+				////////////////////
+				/* Engine Modules */
+                ////////////////////
+                
+                // UI
+                "UMG",
+                "Slate",
+                "SlateCore",
+                "GameSubtitles",
+                "CommonUI",
+
+                // Input
+                "CommonInput",
+
+                // Audio
+                "AudioMixer",
+                "AudioModulation",
+            }
+        );
 
         // Generate compile errors if using DrawDebug functions in test/shipping builds.
         PublicDefinitions.Add("SHIPPING_DRAW_DEBUG_ERROR=1");

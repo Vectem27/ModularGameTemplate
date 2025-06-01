@@ -9,7 +9,7 @@ public class TP_MGFEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 
-        ExtraModuleNames.Add("ModularGameFramework" /* ,"ModularGameFrameworkEditor" */);
+        ExtraModuleNames.AddRange(new string[] { "TP_MGF", /*"TP_MGFEditor"*/ });
 
         TP_MGFTarget.ApplySharedTP_MGFTargetSettings(this);
 
