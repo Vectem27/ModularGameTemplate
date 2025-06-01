@@ -14,5 +14,5 @@ class UGameFeatureAction_AddGameFeatureDependencies final : public UGameFeatureA
 
 public:
 	UPROPERTY(EditAnywhere, Category = "Dependencies", meta = (DisplayName = "Game Feature Dependencies", ToolTip = "List of game feature dependencies to add."))
-	TArray<FString> GameFeatureDependencieNames;
+	TArray<FString> GameFeatureDependenciesNames;
 };

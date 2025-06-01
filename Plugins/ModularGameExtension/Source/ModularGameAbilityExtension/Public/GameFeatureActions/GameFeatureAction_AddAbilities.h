@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameFeatureActions/GameFeatureAction_WorldActionBase.h"
+#include "Abilities/GameplayAbility.h"
 
 #include "GameFeatureAction_AddAbilities.generated.h"
 
@@ -9,6 +10,8 @@ class UInputAction;
 class UAttributeSet;
 class UDataTable;
 class UAbilitySet;
+
+struct FComponentRequestHandle;
 
 USTRUCT(BlueprintType)
 struct FAbilityGrant
@@ -83,8 +86,36 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Abilities", meta = (TitleProperty = "ActorClass", ShowOnlyInnerProperties))
 	TArray<FGameFeatureAbilitiesEntry> AbilitiesList;
 	
-protected:
+private:
+	struct FActorExtensions
+	{
+		TArray<FGameplayAbilitySpecHandle> Abilities;
+		TArray<UAttributeSet*> Attributes;
+	};
+
+	struct FPerContextData
+	{
+		TMap<AActor*, FActorExtensions> ActiveExtensions;
+		TArray<TSharedPtr<FComponentRequestHandle>> ComponentRequests;
+	};
+
+	TMap<FGameFeatureStateChangeContext, FPerContextData> ContextData;
+
 	//~ Begin UGameFeatureAction_WorldActionBase interface
 	virtual void AddToWorld(const FWorldContext& WorldContext, const FGameFeatureStateChangeContext& ChangeContext) override;
 	//~ End UGameFeatureAction_WorldActionBase interface
+
+	void Reset(FPerContextData& ActiveData);
+	void HandleActorExtension(AActor* Actor, FName EventName, int32 EntryIndex, FGameFeatureStateChangeContext ChangeContext);
+	void AddActorAbilities(AActor* Actor, const FGameFeatureAbilitiesEntry& AbilitiesEntry, FPerContextData& ActiveData);
+	void RemoveActorAbilities(AActor* Actor, FPerContextData& ActiveData);
+
+	template<class ComponentType>
+	ComponentType* FindOrAddComponentForActor(AActor* Actor, const FGameFeatureAbilitiesEntry& AbilitiesEntry, FPerContextData& ActiveData)
+	{
+		//@TODO: Just find, no add?
+		return Cast<ComponentType>(FindOrAddComponentForActor(ComponentType::StaticClass(), Actor, AbilitiesEntry, ActiveData));
+	}
+	UActorComponent* FindOrAddComponentForActor(UClass* ComponentType, AActor* Actor, const FGameFeatureAbilitiesEntry& AbilitiesEntry, FPerContextData& ActiveData);
+
 };
