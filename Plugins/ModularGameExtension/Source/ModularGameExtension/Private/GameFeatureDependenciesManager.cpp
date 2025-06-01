@@ -38,7 +38,7 @@ void UGameFeatureDependenciesManager::OnGameFeatureRegistering(const UGameFeatur
 		{
 			UGameFeatureAction_AddGameFeatureDependencies* AddDependenciesAction = Cast<UGameFeatureAction_AddGameFeatureDependencies>(action);
 
-			for (const FString& Dependency : AddDependenciesAction->GameFeatureDependencieNames)
+			for (const FString& Dependency : AddDependenciesAction->GameFeatureDependenciesNames)
 			{
 				// Add to plugins depends on this map
 				FString DepURL;
@@ -90,7 +90,7 @@ TArray<FString> UGameFeatureDependenciesManager::GetGameFeaturePluginDependencie
 		{
 			UGameFeatureAction_AddGameFeatureDependencies* AddDependenciesAction = Cast<UGameFeatureAction_AddGameFeatureDependencies>(action);
 
-			for (const FString& DependencyName : AddDependenciesAction->GameFeatureDependencieNames)
+			for (const FString& DependencyName : AddDependenciesAction->GameFeatureDependenciesNames)
 			{
 				FString PluginURL;
 				GameFeatureSubsystem->GetPluginURLByName(DependencyName, PluginURL);

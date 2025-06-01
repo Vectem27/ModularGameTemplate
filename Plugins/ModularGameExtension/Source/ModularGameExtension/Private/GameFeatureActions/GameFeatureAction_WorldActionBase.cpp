@@ -9,7 +9,7 @@
 
 void UGameFeatureAction_WorldActionBase::OnGameFeatureActivating(FGameFeatureActivatingContext& Context)
 {
-	GameInstanceStartHandles.FindOrAdd(Context) = FWorldDelegates::OnStartGameInstance.AddUObject(this, 
+	GameInstanceStartHandles.FindOrAdd(Context) = FWorldDelegates::OnStartGameInstance.AddUObject(this,
 		&UGameFeatureAction_WorldActionBase::HandleGameInstanceStart, FGameFeatureStateChangeContext(Context));
 
 	// Add to any worlds with associated game instances that have already been initialized
@@ -42,4 +42,3 @@ void UGameFeatureAction_WorldActionBase::HandleGameInstanceStart(UGameInstance* 
 		}
 	}
 }
-
